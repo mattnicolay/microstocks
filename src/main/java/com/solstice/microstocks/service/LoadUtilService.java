@@ -14,22 +14,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UtilService {
+public class LoadUtilService {
 
   private QuoteRepository quoteRepository;
 
-  public UtilService(QuoteRepository quoteRepository) {
+  public LoadUtilService(QuoteRepository quoteRepository) {
     this.quoteRepository = quoteRepository;
   }
 
   @Value("${dataset-url}")
   private URL datasetUrl;
 
-  public List<RawQuote> getStocksFromJson() throws IOException {
-    ObjectMapper jsonMapper = new ObjectMapper();
-
-    return jsonMapper.readValue(datasetUrl, new TypeReference<List<RawQuote>>(){});
-  }
 
   public List<Quote> loadQuotes() throws IOException {
     List<RawQuote> rawQuotes = getStocksFromJson();
@@ -46,6 +41,11 @@ public class UtilService {
     return quotes;
   }
 
+
+  public List<Quote> findAll() {
+    return (List<Quote>) quoteRepository.findAll();
+  }
+
   private Symbol getSymbol(String symbolString, List<Symbol> symbols) {
     for (Symbol symbol : symbols) {
       if (symbol.getSymbol().equals(symbolString)) {
@@ -57,7 +57,11 @@ public class UtilService {
     return newSymbol;
   }
 
-  private List<Quote> findAll() {
-    return (List<Quote>) quoteRepository.findAll();
+
+  private List<RawQuote> getStocksFromJson() throws IOException {
+    ObjectMapper jsonMapper = new ObjectMapper();
+
+    return jsonMapper.readValue(datasetUrl, new TypeReference<List<RawQuote>>(){});
   }
+
 }

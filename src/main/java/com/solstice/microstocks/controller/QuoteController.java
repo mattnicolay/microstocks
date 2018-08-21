@@ -4,7 +4,7 @@ import com.solstice.microstocks.data.AggregateQuote;
 import com.solstice.microstocks.data.TimePeriod;
 import com.solstice.microstocks.repository.QuoteRepository;
 import com.solstice.microstocks.repository.SymbolRepository;
-import com.solstice.microstocks.service.DateUtilService;
+import com.solstice.microstocks.service.QuoteUtilService;
 import java.text.ParseException;
 import java.util.Date;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,16 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping
 public class QuoteController {
 
+  private QuoteUtilService quoteUtilService;
 
-  private QuoteRepository quoteRepository;
-  private SymbolRepository symbolRepository;
-  private DateUtilService dateUtilService;
-
-  public QuoteController(QuoteRepository quoteRepository, SymbolRepository symbolRepository,
-      DateUtilService dateUtilService) {
-    this.quoteRepository = quoteRepository;
-    this.symbolRepository = symbolRepository;
-    this.dateUtilService = dateUtilService;
+  public QuoteController(QuoteUtilService quoteUtilService) {
+    this.quoteUtilService = quoteUtilService;
   }
 
   @GetMapping("/daily/{symbol}/{dateString}")
@@ -33,7 +27,7 @@ public class QuoteController {
       @PathVariable String symbol,
       @PathVariable String dateString) throws ParseException {
 
-    return getAggregate(symbol, dateString, TimePeriod.DAY, "yyyy-MM-dd");
+    return quoteUtilService.getAggregate(symbol, dateString, TimePeriod.DAY, "yyyy-MM-dd");
   }
 
   @GetMapping("/monthly/{symbol}/{dateString}")
@@ -41,19 +35,6 @@ public class QuoteController {
       @PathVariable String symbol,
       @PathVariable String dateString) throws ParseException {
 
-    return getAggregate(symbol, dateString, TimePeriod.MONTH, "yyyy-MM");
-  }
-
-  private AggregateQuote getAggregate(
-      String symbol,
-      String dateString,
-      TimePeriod timePeriod,
-      String pattern)
-      throws ParseException {
-    int symbolId = symbolRepository.findBySymbol(symbol).getId();
-    Date fromDate = dateUtilService.parseDate(dateString, pattern);
-    Date toDate = dateUtilService.getNext(timePeriod, fromDate);
-
-    return quoteRepository.getAggregateData(symbolId, fromDate, toDate);
+    return quoteUtilService.getAggregate(symbol, dateString, TimePeriod.MONTH, "yyyy-MM");
   }
 }

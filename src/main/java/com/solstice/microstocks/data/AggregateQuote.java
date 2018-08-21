@@ -68,4 +68,30 @@ public class AggregateQuote {
   public void setDate(Date date) {
     this.date = date;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof AggregateQuote)) {
+      return false;
+    }
+
+    AggregateQuote other = (AggregateQuote) obj;
+
+    if(!symbol.equals(other.symbol)) {
+      return false;
+    }
+    if (maxPrice != other.maxPrice) {
+      return false;
+    }
+    if (minPrice != other.minPrice) {
+      return false;
+    }
+    if (closingPrice != other.closingPrice) {
+      return false;
+    }
+    if (totalVolume != other.totalVolume) {
+      return false;
+    }
+    return !date.equals(other.date);
+  }
 }
