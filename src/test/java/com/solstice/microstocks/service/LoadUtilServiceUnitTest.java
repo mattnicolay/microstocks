@@ -42,7 +42,7 @@ public class LoadUtilServiceUnitTest {
     MockitoAnnotations.initMocks(this);
     try {
       ReflectionTestUtils.setField(loadUtilService, "datasetUrl",
-          new URL("https://bootcamp-training-files.cfapps.io/week2/week2-stocks.json"));
+          new URL("https://bootcamp-training-files.cfapps.io/week4/week4_stocks.json"));
     } catch (MalformedURLException e) {
       e.printStackTrace();
     }
@@ -73,7 +73,7 @@ public class LoadUtilServiceUnitTest {
   public void testLoadQuotesJsonFailure() {
     try {
       ReflectionTestUtils.setField(loadUtilService, "datasetUrl",
-          new URL("https://bootcamp-training-files.cfapps.io/week2/week2-stocks"));
+          new URL("https://bootcamp-training-files.cfapps.io/week4/week4-stocks"));
     } catch (MalformedURLException e) {
       e.printStackTrace();
     }

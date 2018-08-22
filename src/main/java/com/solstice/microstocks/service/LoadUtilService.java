@@ -8,6 +8,8 @@ import com.solstice.microstocks.data.Symbol;
 import com.solstice.microstocks.repository.QuoteRepository;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +62,9 @@ public class LoadUtilService {
 
   private List<RawQuote> getStocksFromJson() throws IOException {
     ObjectMapper jsonMapper = new ObjectMapper();
+
+    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS");
+    jsonMapper.setDateFormat(dateFormat);
 
     return jsonMapper.readValue(datasetUrl, new TypeReference<List<RawQuote>>(){});
   }
