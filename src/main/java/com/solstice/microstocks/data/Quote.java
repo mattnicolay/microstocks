@@ -19,7 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-@Entity(name = "Quote")
+@Entity
 @SqlResultSetMapping(name="AggregateQuoteMapping", classes = {
     @ConstructorResult(targetClass = AggregateQuote.class,
         columns = {
