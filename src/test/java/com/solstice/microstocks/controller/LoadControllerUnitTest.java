@@ -11,7 +11,6 @@ import com.solstice.microstocks.service.LoadUtilService;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
