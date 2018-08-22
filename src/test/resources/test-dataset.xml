@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+  <quote id="1" symbol="GOOG" price="1111.11" volume="111" date="2018-06-22"/>
+  <quote id="2" symbol="GOOG" price="2222.22" volume="111" date="2018-06-22"/>
+  <quote id="3" symbol="GOOG" price="3333.33" volume="111" date="2018-06-22"/>
+  <quote id="4" symbol="GOOG" price="4444.44" volume="111" date="2018-06-22"/>
+  <quote id="5" symbol="GOOG" price="5555.55" volume="111" date="2018-06-22"/>
+  <quote id="6" symbol="GOOG" price="6666.66" volume="111" date="2018-06-22"/>
+</dataset>

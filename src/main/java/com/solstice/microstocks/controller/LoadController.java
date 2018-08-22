@@ -1,7 +1,6 @@
 package com.solstice.microstocks.controller;
 
 import com.solstice.microstocks.data.Quote;
-import com.solstice.microstocks.repository.QuoteRepository;
 import com.solstice.microstocks.service.LoadUtilService;
 import java.io.IOException;
 import java.util.List;

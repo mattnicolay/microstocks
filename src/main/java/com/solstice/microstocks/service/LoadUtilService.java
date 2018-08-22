@@ -18,12 +18,12 @@ public class LoadUtilService {
 
   private QuoteRepository quoteRepository;
 
+  @Value("${dataset-url}")
+  private URL datasetUrl;
+
   public LoadUtilService(QuoteRepository quoteRepository) {
     this.quoteRepository = quoteRepository;
   }
-
-  @Value("${dataset-url}")
-  private URL datasetUrl;
 
 
   public List<Quote> loadQuotes() throws IOException {

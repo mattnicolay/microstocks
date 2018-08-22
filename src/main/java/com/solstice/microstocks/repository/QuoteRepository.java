@@ -3,6 +3,7 @@ package com.solstice.microstocks.repository;
 import com.solstice.microstocks.data.AggregateQuote;
 import com.solstice.microstocks.data.Quote;
 import java.util.Date;
+import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -13,4 +14,6 @@ public interface QuoteRepository extends CrudRepository<Quote, Integer> {
       @Param("symbolId") int symbolId,
       @Param("fromDate") Date fromDate,
       @Param("toDate") Date toDate);
+
+  List<Quote> findAll();
 }
