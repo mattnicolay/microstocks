@@ -2,6 +2,7 @@
 <dataset>
   <Symbol id="1" symbol="MSFT"/>
   <Symbol id="2" symbol="GOOG" />
+
   <Quote id="1" symbol_id="2" price="1111.11" volume="111" date="2018-06-22 08:30:00"/>
   <Quote id="2" symbol_id="2" price="2222.22" volume="111" date="2018-06-22 10:00:00"/>
   <Quote id="3" symbol_id="2" price="3333.33" volume="111" date="2018-06-22 12:00:00"/>
