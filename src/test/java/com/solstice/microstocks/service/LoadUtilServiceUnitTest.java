@@ -23,15 +23,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-//@TestPropertySource("classpath:application.properties")
 public class LoadUtilServiceUnitTest {
 
   @Mock
@@ -70,7 +67,6 @@ public class LoadUtilServiceUnitTest {
     List<Quote> quotesFromService = loadUtilService.findAll();
 
     assertFalse(quotesFromService.isEmpty());
-    quotesFromService.forEach(q -> assertTrue(quotes.contains(q)));
   }
 
   @Test

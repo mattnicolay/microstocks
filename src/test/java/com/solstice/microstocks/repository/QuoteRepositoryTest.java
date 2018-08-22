@@ -5,9 +5,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.*;
 
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.solstice.microstocks.data.AggregateQuote;
-import com.solstice.microstocks.data.Quote;
-import com.solstice.microstocks.data.Symbol;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,16 +17,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class,
+    TransactionalTestExecutionListener.class,
+    DbUnitTestExecutionListener.class})
+@DatabaseSetup("classpath:test-dataset.xml")
 public class QuoteRepositoryTest {
-
-  @Autowired
-  private TestEntityManager entityManager;
 
   @Autowired
   private QuoteRepository quoteRepository;
@@ -38,21 +43,27 @@ public class QuoteRepositoryTest {
       Date fromDate = simpleDateFormat.parse("2018-06-22");
       Date toDate =simpleDateFormat.parse("2018-06-23");
 
-      Quote quote = new Quote(new Symbol("GOOG"), 1234.56, 789, fromDate);
-      entityManager.persist(quote);
-
       AggregateQuote expected = new AggregateQuote(
           "GOOG",
-          1234.56,
-          1234.56,
-          1234.56,
-          1,
-          fromDate);
+          6666.66,
+          1111.11,
+          6666.66,
+          666,
+          fromDate
+      );
 
       AggregateQuote aggregateQuote = quoteRepository.getAggregateData(2, fromDate, toDate);
 
+
       assertThat(aggregateQuote, is(notNullValue()));
-      assertThat(aggregateQuote, is(equalTo(expected)));
+      assertThat(aggregateQuote.getSymbol(), is(equalTo(expected.getSymbol())));
+      assertThat(aggregateQuote.getMaxPrice(), is(equalTo(expected.getMaxPrice())));
+      assertThat(aggregateQuote.getMinPrice(), is(equalTo(expected.getMinPrice())));
+      assertThat(aggregateQuote.getClosingPrice(), is(equalTo(expected.getClosingPrice())));
+      assertThat(aggregateQuote.getTotalVolume(), is(equalTo(expected.getTotalVolume())));
+      //use simpleDateFormat to make sure dates are same format
+      assertThat(simpleDateFormat.format(aggregateQuote.getDate()),
+          is(equalTo(simpleDateFormat.format(expected.getDate()))));
     } catch (ParseException e) {
       e.printStackTrace();
     }

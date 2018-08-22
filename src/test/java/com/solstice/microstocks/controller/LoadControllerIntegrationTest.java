@@ -8,6 +8,8 @@ import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.netflix.discovery.converters.Auto;
 import com.solstice.microstocks.data.Quote;
 import com.solstice.microstocks.data.Symbol;
 import com.solstice.microstocks.repository.QuoteRepository;
@@ -25,18 +27,27 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+//@DataJpaTest
+//@AutoConfigureTestDatabase(replace = Replace.NONE)
+@DatabaseSetup("classpath:test-dataset.xml")
 public class LoadControllerIntegrationTest {
-  @Mock
+
+  @Autowired
   private QuoteRepository quoteRepository;
 
-  @InjectMocks
+  @Autowired
   private LoadUtilService loadUtilService;
 
   private LoadController loadController;
@@ -44,12 +55,12 @@ public class LoadControllerIntegrationTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    try {
-      ReflectionTestUtils.setField(loadUtilService, "datasetUrl",
-          new URL("https://bootcamp-training-files.cfapps.io/week2/week2-stocks.json"));
-    } catch (MalformedURLException e) {
-      e.printStackTrace();
-    }
+//    try {
+//      ReflectionTestUtils.setField(loadUtilService, "datasetUrl",
+//          new URL("https://bootcamp-training-files.cfapps.io/week2/week2-stocks.json"));
+//    } catch (MalformedURLException e) {
+//      e.printStackTrace();
+//    }
     loadController = new LoadController(loadUtilService);
   }
 

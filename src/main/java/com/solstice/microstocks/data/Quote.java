@@ -20,7 +20,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity(name = "Quote")
-@Table(name = "stocks")
 @SqlResultSetMapping(name="AggregateQuoteMapping", classes = {
     @ConstructorResult(targetClass = AggregateQuote.class,
         columns = {
@@ -35,16 +34,16 @@ import javax.persistence.TemporalType;
 @NamedNativeQuery(
     name = "Quote.getAggregateData",
     query = "SELECT symbol, maxPrice, minPrice, totalVolume, closingPrice, date\n"
-        + "FROM symbols,\n"
+        + "FROM symbol,\n"
         + "(SELECT symbol_id, MAX(price) AS maxPrice, MIN(price) AS minPrice, SUM(volume) AS totalVolume\n"
-        + "FROM stocks\n"
+        + "FROM quote\n"
         + "WHERE symbol_id = :symbolId AND date BETWEEN :fromDate AND :toDate\n) s1, \n"
         + "(SELECT price AS closingPrice, date\n"
-        + "FROM stocks\n"
+        + "FROM quote\n"
         + "WHERE symbol_id = :symbolId AND date < :toDate\n"
         + "ORDER BY date DESC\n"
         + "LIMIT 1) s2\n"
-        + "WHERE s1.symbol_id = symbols.id",
+        + "WHERE s1.symbol_id = symbol.id",
     resultSetMapping = "AggregateQuoteMapping"
 )
 public class Quote {
