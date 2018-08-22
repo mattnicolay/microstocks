@@ -4,6 +4,7 @@ import com.solstice.microstocks.data.Quote;
 import com.solstice.microstocks.service.LoadUtilService;
 import java.io.IOException;
 import java.util.List;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +23,23 @@ public class LoadController {
   }
 
   @PostMapping
-  public ResponseEntity<List<Quote>> load() throws IOException {
-    List<Quote> quotes = loadUtilService.loadQuotes();
-    return new ResponseEntity<>(quotes, HttpStatus.CREATED);
+  public ResponseEntity<List<Quote>> load(){
+    List<Quote> quotes = null;
+    HttpStatus status = HttpStatus.CREATED;
+    try {
+      quotes = loadUtilService.loadQuotes();
+    } catch (IOException e) {
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
+    return new ResponseEntity<>(quotes, status);
   }
 
   @GetMapping
-  public List<Quote> getStocks() {
-    return loadUtilService.findAll();
+  public ResponseEntity<List<Quote>> getStocks() {
+    List<Quote> quotes = loadUtilService.findAll();
+    return new ResponseEntity<>(
+        quotes,
+        new HttpHeaders(),
+        quotes.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
   }
 }

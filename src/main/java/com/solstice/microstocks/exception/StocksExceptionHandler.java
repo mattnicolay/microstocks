@@ -23,7 +23,7 @@ public class StocksExceptionHandler extends ResponseEntityExceptionHandler {
         ex,
         bodyOfResponse,
         new HttpHeaders(),
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.INTERNAL_SERVER_ERROR,
         request);
   }
 
@@ -37,7 +37,7 @@ public class StocksExceptionHandler extends ResponseEntityExceptionHandler {
         ex,
         bodyOfResponse,
         new HttpHeaders(),
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.INTERNAL_SERVER_ERROR,
         request);
   }
 

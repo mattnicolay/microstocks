@@ -20,13 +20,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @RunWith(MockitoJUnitRunner.class)
 @WebMvcTest(QuoteController.class)
 public class QuoteControllerUnitTest {
-
-  @Mock
-  private QuoteRepository quoteRepository;
-
-  @Mock
-  private SymbolRepository symbolRepository;
-
   @Mock
   private QuoteUtilService quoteUtilService;
 
