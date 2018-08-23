@@ -1,15 +1,16 @@
 package com.solstice.microstocks.service;
 
-import com.solstice.microstocks.data.AggregateQuote;
-import com.solstice.microstocks.data.TimePeriod;
+import com.solstice.microstocks.model.AggregateQuote;
+import com.solstice.microstocks.model.TimePeriod;
 import com.solstice.microstocks.repository.QuoteRepository;
-import com.solstice.microstocks.repository.SymbolRepository;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class QuoteUtilService {
@@ -17,25 +18,30 @@ public class QuoteUtilService {
   private final long ONE_DAY_IN_MILLISECONDS = 86400000L;
 
   private QuoteRepository quoteRepository;
-  private SymbolRepository symbolRepository;
+  private RestTemplate restTemplate;
 
   public QuoteUtilService(QuoteRepository quoteRepository,
-      SymbolRepository symbolRepository) {
+      RestTemplate restTemplate) {
     this.quoteRepository = quoteRepository;
-    this.symbolRepository = symbolRepository;
+    this.restTemplate = restTemplate;
   }
 
   public AggregateQuote getAggregate(
       String symbol,
       String dateString,
       TimePeriod timePeriod,
-      String pattern) throws ParseException {
+      String pattern) throws NullPointerException, ParseException {
 
-    int symbolId = symbolRepository.findBySymbol(symbol).getId();
+    int symbolId = getIdFromSymbolService(symbol);
     Date fromDate = parseDate(dateString, pattern);
     Date toDate = getNext(timePeriod, fromDate);
 
     return quoteRepository.getAggregateData(symbolId, fromDate, toDate);
+  }
+
+  private int getIdFromSymbolService(String symbol) throws NullPointerException {
+    return restTemplate.getForObject("http://localhost:8181/symbols/" + symbol + "/id",
+          Integer.class);
   }
 
   private Date parseDate(String dateString, String pattern) throws ParseException {

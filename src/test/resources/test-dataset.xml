@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-  <Symbol id="1" symbol="MSFT"/>
-  <Symbol id="2" symbol="GOOG" />
+  <Symbol id="1" name="MSFT"/>
+  <Symbol id="2" name="GOOG" />
 
   <Quote id="1" symbol_id="2" price="1111.11" volume="111" date="2018-06-22 08:30:00"/>
   <Quote id="2" symbol_id="2" price="2222.22" volume="111" date="2018-06-22 10:00:00"/>

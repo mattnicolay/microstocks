@@ -1,19 +1,21 @@
-package com.solstice.microstocks.data;
+package com.solstice.microstocks.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 
 public class AggregateQuote {
 
-  private String symbol;
+  @JsonProperty("symbol")
+  private String name;
   private double maxPrice;
   private double minPrice;
   private double closingPrice;
   private int totalVolume;
   private Date date;
 
-  public AggregateQuote(String symbol, double maxPrice, double minPrice, double closingPrice, int totalVolume,
+  public AggregateQuote(String name, double maxPrice, double minPrice, double closingPrice, int totalVolume,
       Date date) {
-    this.symbol = symbol;
+    this.name = name;
     this.maxPrice = maxPrice;
     this.minPrice = minPrice;
     this.closingPrice = closingPrice;
@@ -21,12 +23,12 @@ public class AggregateQuote {
     this.date = date;
   }
 
-  public String getSymbol() {
-    return symbol;
+  public String getName() {
+    return name;
   }
 
-  public void setSymbol(String symbol) {
-    this.symbol = symbol;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public double getMaxPrice() {
@@ -77,7 +79,7 @@ public class AggregateQuote {
 
     AggregateQuote other = (AggregateQuote) obj;
 
-    if(!symbol.equals(other.symbol)) {
+    if(!name.equals(other.name)) {
       return false;
     }
     if (maxPrice != other.maxPrice) {

@@ -1,7 +1,7 @@
 package com.solstice.microstocks.repository;
 
-import com.solstice.microstocks.data.AggregateQuote;
-import com.solstice.microstocks.data.Quote;
+import com.solstice.microstocks.model.AggregateQuote;
+import com.solstice.microstocks.model.Quote;
 import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;

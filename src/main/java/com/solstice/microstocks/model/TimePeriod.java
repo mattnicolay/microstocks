@@ -1,4 +1,4 @@
-package com.solstice.microstocks.data;
+package com.solstice.microstocks.model;
 
 public enum TimePeriod {
   DAY, MONTH

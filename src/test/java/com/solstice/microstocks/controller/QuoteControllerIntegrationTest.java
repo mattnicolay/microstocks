@@ -1,55 +1,27 @@
 package com.solstice.microstocks.controller;
 
 //import static org.hamcrest.CoreMatchers.any;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.solstice.microstocks.data.AggregateQuote;
-import com.solstice.microstocks.data.Quote;
-import com.solstice.microstocks.data.Symbol;
+import com.solstice.microstocks.model.AggregateQuote;
 import com.solstice.microstocks.repository.QuoteRepository;
-import com.solstice.microstocks.repository.SymbolRepository;
 import com.solstice.microstocks.service.QuoteUtilService;
-import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -59,9 +31,6 @@ public class QuoteControllerIntegrationTest {
 
   @Mock
   private QuoteRepository quoteRepository;
-
-  @Mock
-  private SymbolRepository symbolRepository;
 
   @Mock
   private QuoteUtilService quoteUtilService;
@@ -109,7 +78,7 @@ public class QuoteControllerIntegrationTest {
 //
 //      assertThat(quote, is(equalTo(expected)));
 //
-//      assertThat(quote.getSymbol(), is(equalTo("GOOG")));
+//      assertThat(quote.getSymbolId(), is(equalTo("GOOG")));
 //      assertThat(quote.getMaxPrice(), is(equalTo(1130.99)));
 //      assertThat(quote.getMinPrice(), is(equalTo(1120.01)));
 //      assertThat(quote.getClosingPrice(), is(equalTo(1122.57)));
@@ -128,7 +97,7 @@ public class QuoteControllerIntegrationTest {
       AggregateQuote quote = quoteController.getAggregateDaily("GOOG", "2018-06-22");
 
       assertThat(quote, is(nullValue()));
-    } catch (ParseException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
@@ -148,7 +117,7 @@ public class QuoteControllerIntegrationTest {
 //
 //      assertThat(quote, is(equalTo(expected)));
 //
-//      assertThat(quote.getSymbol(), is(equalTo("GOOG")));
+//      assertThat(quote.getSymbolId(), is(equalTo("GOOG")));
 //      assertThat(quote.getMaxPrice(), is(equalTo(1130.99)));
 //      assertThat(quote.getMinPrice(), is(equalTo(1120)));
 //      assertThat(quote.getClosingPrice(), is(equalTo(1129.65)));
@@ -166,7 +135,7 @@ public class QuoteControllerIntegrationTest {
       AggregateQuote quote = quoteController.getAggregateMonthly("GOOG", "2018-06");
 
       assertThat(quote, is(nullValue()));
-    } catch (ParseException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }

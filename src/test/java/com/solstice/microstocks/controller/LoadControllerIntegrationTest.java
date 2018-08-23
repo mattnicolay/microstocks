@@ -1,20 +1,11 @@
 package com.solstice.microstocks.controller;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.solstice.microstocks.data.Quote;
-import com.solstice.microstocks.data.Symbol;
 import com.solstice.microstocks.repository.QuoteRepository;
 import com.solstice.microstocks.service.LoadUtilService;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +13,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)

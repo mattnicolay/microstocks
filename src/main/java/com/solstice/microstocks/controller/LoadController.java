@@ -1,6 +1,6 @@
 package com.solstice.microstocks.controller;
 
-import com.solstice.microstocks.data.Quote;
+import com.solstice.microstocks.model.Quote;
 import com.solstice.microstocks.service.LoadUtilService;
 import java.io.IOException;
 import java.util.List;
@@ -30,6 +30,7 @@ public class LoadController {
       quotes = loadUtilService.loadQuotes();
     } catch (IOException e) {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
+      e.printStackTrace();
     }
     return new ResponseEntity<>(quotes, status);
   }

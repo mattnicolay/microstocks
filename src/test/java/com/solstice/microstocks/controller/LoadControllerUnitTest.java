@@ -5,8 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.Mockito.when;
 
-import com.solstice.microstocks.data.Quote;
-import com.solstice.microstocks.data.Symbol;
+import com.solstice.microstocks.model.Quote;
 import com.solstice.microstocks.service.LoadUtilService;
 import java.io.IOException;
 import java.util.Arrays;
@@ -53,7 +52,7 @@ public class LoadControllerUnitTest {
 
   @Test
   public void testGetLoad() throws Exception {
-    Quote mockQuote = new Quote(new Symbol("GOOG"), 1234.56, 100, new Date());
+    Quote mockQuote = new Quote(1, 1234.56, 100, new Date());
     when(loadUtilService.findAll()).thenReturn(Arrays.asList(mockQuote, mockQuote));
 
     mockMvc.perform(get("/load")).andExpect(status().isOk());

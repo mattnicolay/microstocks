@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.solstice.microstocks.data.AggregateQuote;
+import com.solstice.microstocks.model.AggregateQuote;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,7 +52,7 @@ public class QuoteRepositoryTest {
 
 
     assertThat(aggregateQuote, is(notNullValue()));
-    assertThat(aggregateQuote.getSymbol(), is(equalTo(expected.getSymbol())));
+    assertThat(aggregateQuote.getName(), is(equalTo(expected.getName())));
     assertThat(aggregateQuote.getMaxPrice(), is(equalTo(expected.getMaxPrice())));
     assertThat(aggregateQuote.getMinPrice(), is(equalTo(expected.getMinPrice())));
     assertThat(aggregateQuote.getClosingPrice(), is(equalTo(expected.getClosingPrice())));

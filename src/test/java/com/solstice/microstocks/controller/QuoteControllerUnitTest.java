@@ -3,8 +3,6 @@ package com.solstice.microstocks.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.solstice.microstocks.repository.QuoteRepository;
-import com.solstice.microstocks.repository.SymbolRepository;
 import com.solstice.microstocks.service.QuoteUtilService;
 import org.junit.Before;
 import org.junit.Test;

@@ -3,8 +3,7 @@ package com.solstice.microstocks.service;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-import com.solstice.microstocks.data.Quote;
-import com.solstice.microstocks.data.Symbol;
+import com.solstice.microstocks.model.Quote;
 import com.solstice.microstocks.repository.QuoteRepository;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -57,7 +56,7 @@ public class LoadUtilServiceUnitTest {
 
   @Test
   public void testFindAll() {
-    Quote quote = new Quote(new Symbol("TEST"), 1234.56, 789, new Date());
+    Quote quote = new Quote(1, 1234.56, 789, new Date());
     List<Quote> quotes = Arrays.asList(quote, quote, quote);
     when(quoteRepository.findAll()).thenReturn(quotes);
     List<Quote> quotesFromService = loadUtilService.findAll();

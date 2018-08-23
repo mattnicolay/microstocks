@@ -1,21 +1,15 @@
-package com.solstice.microstocks.data;
+package com.solstice.microstocks.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.SqlResultSetMapping;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,7 +17,7 @@ import javax.persistence.TemporalType;
 @SqlResultSetMapping(name="AggregateQuoteMapping", classes = {
     @ConstructorResult(targetClass = AggregateQuote.class,
         columns = {
-            @ColumnResult(name="symbol", type=String.class),
+            @ColumnResult(name="name", type=String.class),
             @ColumnResult(name="maxPrice", type=Double.class),
             @ColumnResult(name="minPrice", type=Double.class),
             @ColumnResult(name="closingPrice", type=Double.class),
@@ -33,8 +27,8 @@ import javax.persistence.TemporalType;
 })
 @NamedNativeQuery(
     name = "Quote.getAggregateData",
-    query = "SELECT symbol, maxPrice, minPrice, totalVolume, closingPrice, date\n"
-        + "FROM symbol,\n"
+    query = "SELECT s.name, maxPrice, minPrice, totalVolume, closingPrice, date\n"
+        + "FROM symbol s,\n"
         + "(SELECT symbol_id, MAX(price) AS maxPrice, MIN(price) AS minPrice, SUM(volume) AS totalVolume\n"
         + "FROM quote\n"
         + "WHERE symbol_id = :symbolId AND date BETWEEN :fromDate AND :toDate\n) s1, \n"
@@ -43,35 +37,27 @@ import javax.persistence.TemporalType;
         + "WHERE symbol_id = :symbolId AND date < :toDate\n"
         + "ORDER BY date DESC\n"
         + "LIMIT 1) s2\n"
-        + "WHERE s1.symbol_id = symbol.id",
+        + "WHERE s1.symbol_id = s.id",
     resultSetMapping = "AggregateQuoteMapping"
 )
 public class Quote {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonProperty("QuoteId")
   private int id;
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinColumn(name="symbolId", nullable=false)
-  private Symbol symbol;
-  @Column(nullable = false)
-  @JsonProperty("Price")
+  @JsonProperty("symbol")
+  private long symbolId;
   private double price;
-  @Column(nullable = false)
-  @JsonProperty("Volume")
   private int volume;
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(nullable = false)
-  @JsonProperty("Date")
   private Date date;
 
 
   public Quote() {
   }
 
-  public Quote(Symbol symbol, double price, int volume, Date date) {
-    this.symbol = symbol;
+  public Quote(long symbolId, double price, int volume, Date date) {
+    this.symbolId = symbolId;
     this.price = price;
     this.volume = volume;
     this.date = date;
@@ -81,12 +67,12 @@ public class Quote {
     return id;
   }
 
-  public Symbol getSymbol() {
-    return symbol;
+  public long getSymbolId() {
+    return symbolId;
   }
 
-  public void setSymbol(Symbol symbol) {
-    this.symbol = symbol;
+  public void setSymbolId(long symbolId) {
+    this.symbolId = symbolId;
   }
 
   public double getPrice() {
