@@ -5,6 +5,7 @@ package com.solstice.microstocks.service;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -39,26 +40,22 @@ public class QuoteUtilServiceUnitTest {
   @InjectMocks
   private QuoteUtilService quoteUtilService;
 
-  private DateFormat dateFormat;
-  private AggregateQuote expected;
-
   @Before
   public void setup() throws ParseException {
     MockitoAnnotations.initMocks(this);
-    dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    expected = new AggregateQuote(
-        "GOOG",
-        1130.99,
-        1120,
-        1129.65,
-        2159363,
-        dateFormat.parse("2018-06-22 16:30:00"));
   }
 
   @Test
-  public void testGetAggregateDaily() {
+  public void testGetAggregate() {
     try {
+      AggregateQuote expected = new AggregateQuote(
+          "GOOG",
+          1130.99,
+          1120,
+          1129.65,
+          2159363,
+          new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-06-22 16:30:00"));
+
       when(restTemplate.getForObject(any(String.class), any())).thenReturn(2);
       when(quoteRepository.getAggregateData(any(Integer.class), any(Date.class), any(Date.class))).thenReturn(expected);
 
@@ -77,24 +74,30 @@ public class QuoteUtilServiceUnitTest {
   }
 
   @Test
-  public void testGetAggregateMonthly() {
+  public void testGetAggregateRestTemplateFailure() {
     try {
-      expected.setDate(dateFormat.parse("2018-06-26 16:30:00"));
+      when(restTemplate.getForObject(any(String.class), any())).thenThrow(new NullPointerException("service unreachable"));
 
-      when(restTemplate.getForObject(any(String.class), any())).thenReturn(2);
-      when(quoteRepository.getAggregateData(any(Integer.class), any(Date.class), any(Date.class))).thenReturn(expected);
+      AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY, "yyyy-MM-dd");
 
-      AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06", TimePeriod.MONTH, "yyyy-MM");
+      fail();
+    } catch (Exception e) {
 
-      assertThat(aggregateQuote.getName(), is(equalTo(expected.getName())));
-      assertThat(aggregateQuote.getMaxPrice(), is(equalTo(expected.getMaxPrice())));
-      assertThat(aggregateQuote.getMinPrice(), is(equalTo(expected.getMinPrice())));
-      assertThat(aggregateQuote.getClosingPrice(), is(equalTo(expected.getClosingPrice())));
-      assertThat(aggregateQuote.getTotalVolume(), is(equalTo(expected.getTotalVolume())));
-      assertThat(aggregateQuote.getDate(), is(equalTo(expected.getDate())));
-    } catch (ParseException e) {
-      e.printStackTrace();
     }
+  }
 
+  @Test
+  public void testGetAggregateNotFoundInRepo() {
+    try {
+      when(quoteRepository
+          .getAggregateData(any(Integer.class), any(Date.class), any(Date.class)))
+          .thenThrow(new Exception("Not found"));
+
+      AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY, "yyyy-MM-dd");
+
+      fail();
+    } catch (Exception e) {
+
+    }
   }
 }
