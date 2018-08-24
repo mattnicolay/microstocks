@@ -40,7 +40,7 @@ public class QuoteUtilService {
   }
 
   private int getIdFromSymbolService(String symbol) throws NullPointerException {
-    return restTemplate.getForObject("http://localhost:8181/symbols/" + symbol + "/id",
+    return restTemplate.getForObject("https://symbol-service-active-nyala.cfapps.io/symbols/" + symbol + "/id",
           Integer.class);
   }
 

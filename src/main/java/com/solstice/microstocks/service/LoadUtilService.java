@@ -26,7 +26,6 @@ public class LoadUtilService {
   public List<Quote> loadQuotes() throws IOException {
     List<Quote> quotes = getStocksFromJson();
 
-
     quoteRepository.saveAll(quotes);
     return quotes;
   }
