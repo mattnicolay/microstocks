@@ -3,6 +3,7 @@ package com.solstice.microstocks.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solstice.microstocks.model.Quote;
+import com.solstice.microstocks.repository.BulkImportRepository;
 import com.solstice.microstocks.repository.QuoteRepository;
 import java.io.IOException;
 import java.net.URL;
@@ -14,12 +15,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoadUtilService {
 
+//  private BulkImportRepository bulkImportRepository;
   private QuoteRepository quoteRepository;
 
   @Value("${dataset-url}")
   private URL datasetUrl;
 
   public LoadUtilService(QuoteRepository quoteRepository) {
+//    this.bulkImportRepository = bulkImportRepository;
     this.quoteRepository = quoteRepository;
   }
 

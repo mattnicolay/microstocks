@@ -1,5 +1,7 @@
 package com.solstice.microstocks.service;
 
+
+import com.netflix.discovery.EurekaClient;
 import com.solstice.microstocks.model.AggregateQuote;
 import com.solstice.microstocks.model.TimePeriod;
 import com.solstice.microstocks.repository.QuoteRepository;
@@ -8,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,11 +20,13 @@ public class QuoteUtilService {
 
   private QuoteRepository quoteRepository;
   private RestTemplate restTemplate;
+  private EurekaClient eurekaClient;
 
   public QuoteUtilService(QuoteRepository quoteRepository,
-      RestTemplate restTemplate) {
+      RestTemplate restTemplate, EurekaClient eurekaClient) {
     this.quoteRepository = quoteRepository;
     this.restTemplate = restTemplate;
+    this.eurekaClient = eurekaClient;
   }
 
   public AggregateQuote getAggregate(
@@ -40,8 +43,13 @@ public class QuoteUtilService {
   }
 
   private int getIdFromSymbolService(String symbol) throws NullPointerException {
-    return restTemplate.getForObject("https://symbol-service-active-nyala.cfapps.io/symbols/" + symbol + "/id",
+    return restTemplate.getForObject(String.format("%s/symbol/symbols/%s/id", getGatewayUrl(),symbol),
           Integer.class);
+  }
+
+  private String getGatewayUrl() {
+    return eurekaClient.getNextServerFromEureka("GATEWAY-APPLICATION", false)
+        .getHomePageUrl();
   }
 
   private Date parseDate(String dateString, String pattern) throws ParseException {

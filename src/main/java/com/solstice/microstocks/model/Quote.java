@@ -9,9 +9,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedNativeQuery;
+import javax.persistence.PostLoad;
+import javax.persistence.PostPersist;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import org.springframework.data.domain.Persistable;
 
 @Entity
 @SqlResultSetMapping(name="AggregateQuoteMapping", classes = {
@@ -40,10 +44,10 @@ import javax.persistence.TemporalType;
         + "WHERE s1.symbol_id = s.id",
     resultSetMapping = "AggregateQuoteMapping"
 )
-public class Quote {
+public class Quote{
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private int id;
   @JsonProperty("symbol")
   private long symbolId;

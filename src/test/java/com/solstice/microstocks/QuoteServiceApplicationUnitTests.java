@@ -13,6 +13,6 @@ import org.junit.runners.Suite;
     QuoteControllerUnitTest.class,
     LoadUtilServiceUnitTest.class,
     QuoteUtilServiceUnitTest.class})
-public class MicrostocksApplicationUnitTests {
+public class QuoteServiceApplicationUnitTests {
 
 }
