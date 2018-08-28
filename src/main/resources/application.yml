@@ -30,6 +30,8 @@ spring:
           org.hibernate.dialect.MySQL5Dialect
         jdbc:
           batch_size: 25
+  profiles:
+    active: local
 
 dataset-url:
   https://bootcamp-training-files.cfapps.io/week4/week4_stocks.json

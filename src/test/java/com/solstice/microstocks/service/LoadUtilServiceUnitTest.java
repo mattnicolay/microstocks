@@ -38,6 +38,7 @@ public class LoadUtilServiceUnitTest {
     try {
       ReflectionTestUtils.setField(loadUtilService, "datasetUrl",
           new URL("https://bootcamp-training-files.cfapps.io/week4/week4_stocks.json"));
+      ReflectionTestUtils.setField(loadUtilService, "profile", "local");
     } catch (MalformedURLException e) {
       e.printStackTrace();
     }
@@ -45,6 +46,18 @@ public class LoadUtilServiceUnitTest {
 
   @Test
   public void testLoadQuotes() {
+    try {
+      List<Quote> quotes = loadUtilService.loadQuotes();
+
+      assertFalse(quotes.isEmpty());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void testLoadQuotesCloudProfile() {
+    ReflectionTestUtils.setField(loadUtilService, "profile", "cloud");
     try {
       List<Quote> quotes = loadUtilService.loadQuotes();
 

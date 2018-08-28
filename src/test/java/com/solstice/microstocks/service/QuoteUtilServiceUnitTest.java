@@ -9,6 +9,8 @@ import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
 import com.solstice.microstocks.model.AggregateQuote;
 import com.solstice.microstocks.model.TimePeriod;
 import com.solstice.microstocks.repository.QuoteRepository;
@@ -26,6 +28,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.web.client.RestTemplate;
+import sun.jvm.hotspot.oops.Instance;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
@@ -36,6 +39,15 @@ public class QuoteUtilServiceUnitTest {
 
   @Mock
   private RestTemplate restTemplate;
+
+  @Mock
+  private EurekaClient eurekaClient;
+
+  @Mock
+  private DateService dateService;
+
+  @Mock
+  private InstanceInfo instanceInfo;
 
   @InjectMocks
   private QuoteUtilService quoteUtilService;
@@ -58,6 +70,9 @@ public class QuoteUtilServiceUnitTest {
 
       when(restTemplate.getForObject(any(String.class), any())).thenReturn(2);
       when(quoteRepository.getAggregateData(any(Integer.class), any(Date.class), any(Date.class))).thenReturn(expected);
+      when(eurekaClient.getNextServerFromEureka(any(String.class), any(Boolean.class))).thenReturn(instanceInfo);
+      when(dateService.parseDate(any(String.class), any(String.class))).thenReturn(new Date());
+      when(dateService.getNext(any(TimePeriod.class), any(Date.class))).thenReturn(new Date());
 
       AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY, "yyyy-MM-dd");
 
@@ -76,8 +91,6 @@ public class QuoteUtilServiceUnitTest {
   @Test
   public void testGetAggregateRestTemplateFailure() {
     try {
-      when(restTemplate.getForObject(any(String.class), any())).thenThrow(new NullPointerException("service unreachable"));
-
       AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY, "yyyy-MM-dd");
 
       fail();

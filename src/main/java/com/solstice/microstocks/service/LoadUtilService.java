@@ -29,19 +29,25 @@ public class LoadUtilService {
 
   public List<Quote> loadQuotes() throws IOException {
     List<Quote> quotes = getStocksFromJson();
-    List<Quote> dbQuotes = findAll();
-    List<Quote> savedQuotes = new ArrayList<>();
+
+    if (profile.equals("cloud")) {
+      List<Quote> dbQuotes = findAll();
+      List<Quote> savedQuotes = new ArrayList<>();
 
 
-    for (int i = 0; savedQuotes.size() < 800 && i < quotes.size(); i++) {
-      Quote quote = quotes.get(i);
-      if (!dbQuotes.contains(quote)) {
-        quoteRepository.save(quote);
-        savedQuotes.add(quote);
+      for (int i = 0; savedQuotes.size() < 800 && i < quotes.size(); i++) {
+        Quote quote = quotes.get(i);
+        if (!dbQuotes.contains(quote)) {
+          quoteRepository.save(quote);
+          savedQuotes.add(quote);
+        }
       }
+
+      return savedQuotes;
     }
 
-    return savedQuotes;
+    quoteRepository.saveAll(quotes);
+    return quotes;
   }
 
   public List<Quote> findAll() {
