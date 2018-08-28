@@ -35,19 +35,4 @@ public class LoadController {
     }
     return new ResponseEntity<>(quotes, status);
   }
-
-  @GetMapping
-  public ResponseEntity<List<Quote>> getStocks() {
-    List<Quote> quotes = loadUtilService.findAll();
-    return new ResponseEntity<>(
-        quotes,
-        new HttpHeaders(),
-        quotes.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
-  }
-
-  @DeleteMapping
-  public ResponseEntity deleteStocks() {
-    loadUtilService.deleteAll();
-    return new ResponseEntity(new HttpHeaders(), HttpStatus.OK);
-  }
 }

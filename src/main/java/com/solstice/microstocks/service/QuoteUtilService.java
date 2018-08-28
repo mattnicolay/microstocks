@@ -1,34 +1,36 @@
 package com.solstice.microstocks.service;
 
-
-import com.netflix.discovery.EurekaClient;
+import com.solstice.microstocks.feign.SymbolServiceClient;
 import com.solstice.microstocks.model.AggregateQuote;
+import com.solstice.microstocks.model.Quote;
 import com.solstice.microstocks.model.TimePeriod;
 import com.solstice.microstocks.repository.QuoteRepository;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.List;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class QuoteUtilService {
 
 
   private QuoteRepository quoteRepository;
-  private RestTemplate restTemplate;
-  private EurekaClient eurekaClient;
+  private SymbolServiceClient symbolServiceClient;
   private DateService dateService;
 
-  public QuoteUtilService(QuoteRepository quoteRepository,
-      RestTemplate restTemplate, EurekaClient eurekaClient,
+  public QuoteUtilService(QuoteRepository quoteRepository, SymbolServiceClient symbolServiceClient,
       DateService dateService) {
     this.quoteRepository = quoteRepository;
-    this.restTemplate = restTemplate;
-    this.eurekaClient = eurekaClient;
+    this.symbolServiceClient= symbolServiceClient;
     this.dateService = dateService;
+  }
+
+  public List<Quote> findAll() {
+    return quoteRepository.findAll();
+  }
+
+  public void deleteAll() {
+    quoteRepository.deleteAll();
   }
 
   public AggregateQuote getAggregate(
@@ -45,13 +47,7 @@ public class QuoteUtilService {
   }
 
   private int getIdFromSymbolService(String symbol) throws NullPointerException {
-    return restTemplate.getForObject(String.format("%s/symbol/symbols/%s/id", getGatewayUrl(),symbol),
-          Integer.class);
-  }
-
-  private String getGatewayUrl() {
-    return eurekaClient.getNextServerFromEureka("GATEWAY-APPLICATION", false)
-        .getHomePageUrl();
+    return symbolServiceClient.getSymbolIdByName(symbol);
   }
 
 

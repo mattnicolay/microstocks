@@ -31,7 +31,7 @@ public class LoadUtilService {
     List<Quote> quotes = getStocksFromJson();
 
     if (profile.equals("cloud")) {
-      List<Quote> dbQuotes = findAll();
+      List<Quote> dbQuotes = quoteRepository.findAll();
       List<Quote> savedQuotes = new ArrayList<>();
 
 
@@ -48,14 +48,6 @@ public class LoadUtilService {
 
     quoteRepository.saveAll(quotes);
     return quotes;
-  }
-
-  public List<Quote> findAll() {
-    return quoteRepository.findAll();
-  }
-
-  public void deleteAll() {
-    quoteRepository.deleteAll();
   }
 
 
