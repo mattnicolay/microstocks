@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-public class DateServiceTest {
+public class DateServiceUnitTest {
   private DateService dateService = new DateService();
 
   @Test
