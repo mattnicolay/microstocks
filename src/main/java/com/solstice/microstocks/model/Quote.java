@@ -47,7 +47,7 @@ import org.springframework.data.domain.Persistable;
 public class Quote{
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   @JsonProperty("symbol")
   private long symbolId;
@@ -101,5 +101,24 @@ public class Quote{
 
   public void setDate(Date date) {
     this.date = date;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Quote)) {
+      return false;
+    }
+
+    Quote quote = (Quote) obj;
+    if (symbolId != quote.symbolId) {
+      return false;
+    }
+    if (price != quote.price) {
+      return false;
+    }
+    if (volume != quote.volume) {
+      return false;
+    }
+    return date.equals(quote.date);
   }
 }
