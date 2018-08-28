@@ -43,20 +43,11 @@ public class QuoteUtilServiceUnitTest {
   @Mock
   private QuoteRepository quoteRepository;
 
-  @Mock
-  private RestTemplate restTemplate;
-
-  @Mock
-  private EurekaClient eurekaClient;
-
-  @Mock
-  private InstanceInfo instanceInfo;
-
   @InjectMocks
   private QuoteUtilService quoteUtilService;
 
   @Before
-  public void setup() throws ParseException {
+  public void setup() {
     MockitoAnnotations.initMocks(this);
   }
 
@@ -69,11 +60,7 @@ public class QuoteUtilServiceUnitTest {
           1120,
           1129.65,
           2159363,
-          new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-06-22 16:30:00"));
-
-      when(restTemplate.getForObject(any(String.class), any())).thenReturn(2);
-      when(quoteRepository.getAggregateData(any(Integer.class), any(LocalDate.class), any(LocalDate.class))).thenReturn(expected);
-      when(eurekaClient.getNextServerFromEureka(any(String.class), any(Boolean.class))).thenReturn(instanceInfo);
+          LocalDate.parse("2018-06-22"));
 
       AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY);
 
@@ -89,12 +76,34 @@ public class QuoteUtilServiceUnitTest {
 
   }
 
-  //add monthly test
+  @Test
+  public void testGetAggregateMonthly() {
+    try {
+      AggregateQuote expected = new AggregateQuote(
+          "GOOG",
+          1130.99,
+          1120,
+          1129.65,
+          2159363,
+          LocalDate.parse("2018-06-26"));
+
+      AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-01", TimePeriod.MONTH);
+
+      assertThat(aggregateQuote.getName(), is(equalTo(expected.getName())));
+      assertThat(aggregateQuote.getMaxPrice(), is(equalTo(expected.getMaxPrice())));
+      assertThat(aggregateQuote.getMinPrice(), is(equalTo(expected.getMinPrice())));
+      assertThat(aggregateQuote.getClosingPrice(), is(equalTo(expected.getClosingPrice())));
+      assertThat(aggregateQuote.getTotalVolume(), is(equalTo(expected.getTotalVolume())));
+      assertThat(aggregateQuote.getDate(), is(equalTo(expected.getDate())));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
   @Test
   public void testGetAggregateRestTemplateFailure() {
     try {
-      AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY);
+      quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY);
 
       fail();
     } catch (Exception e) {
@@ -109,7 +118,7 @@ public class QuoteUtilServiceUnitTest {
           .getAggregateData(any(Integer.class), any(LocalDate.class), any(LocalDate.class)))
           .thenThrow(new Exception("Not found"));
 
-      AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY);
+      quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY);
 
       fail();
     } catch (Exception e) {

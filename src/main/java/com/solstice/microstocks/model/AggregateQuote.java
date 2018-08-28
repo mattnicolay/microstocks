@@ -1,7 +1,7 @@
 package com.solstice.microstocks.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class AggregateQuote {
 
@@ -11,10 +11,10 @@ public class AggregateQuote {
   private double minPrice;
   private double closingPrice;
   private int totalVolume;
-  private Date date;
+  private LocalDate date;
 
   public AggregateQuote(String name, double maxPrice, double minPrice, double closingPrice, int totalVolume,
-      Date date) {
+      LocalDate date) {
     this.name = name;
     this.maxPrice = maxPrice;
     this.minPrice = minPrice;
@@ -63,11 +63,11 @@ public class AggregateQuote {
     this.totalVolume = totalVolume;
   }
 
-  public Date getDate() {
+  public LocalDate getDate() {
     return date;
   }
 
-  public void setDate(Date date) {
+  public void setDate(LocalDate date) {
     this.date = date;
   }
 

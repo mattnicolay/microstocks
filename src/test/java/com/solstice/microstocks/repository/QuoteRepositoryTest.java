@@ -45,7 +45,7 @@ public class QuoteRepositoryTest {
         1111.11,
         6666.66,
         666,
-        new Date(fromDate.toEpochDay())
+        fromDate
     );
 
     AggregateQuote aggregateQuote = quoteRepository.getAggregateData(2, fromDate, toDate);

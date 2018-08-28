@@ -1,6 +1,7 @@
 package com.solstice.microstocks.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
@@ -26,7 +27,7 @@ import org.springframework.data.domain.Persistable;
             @ColumnResult(name="minPrice", type=Double.class),
             @ColumnResult(name="closingPrice", type=Double.class),
             @ColumnResult(name="totalVolume", type=Integer.class),
-            @ColumnResult(name="date", type=Date.class)
+            @ColumnResult(name="date", type=LocalDate.class)
         })
 })
 @NamedNativeQuery(
