@@ -49,17 +49,4 @@ public class LoadControllerUnitTest {
 
     mockMvc.perform(post("/load")).andExpect(status().isInternalServerError());
   }
-
-  @Test
-  public void testGetLoad() throws Exception {
-    Quote mockQuote = new Quote(1, 1234.56, 100, new Date());
-    when(loadUtilService.findAll()).thenReturn(Arrays.asList(mockQuote, mockQuote));
-
-    mockMvc.perform(get("/load")).andExpect(status().isOk());
-  }
-
-  @Test
-  public void testGetLoadNoData() throws Exception {
-    mockMvc.perform(get("/load")).andExpect(status().isNotFound());
-  }
 }

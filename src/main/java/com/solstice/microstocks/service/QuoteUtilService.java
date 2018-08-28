@@ -5,8 +5,7 @@ import com.solstice.microstocks.model.AggregateQuote;
 import com.solstice.microstocks.model.Quote;
 import com.solstice.microstocks.model.TimePeriod;
 import com.solstice.microstocks.repository.QuoteRepository;
-import java.text.ParseException;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +15,11 @@ public class QuoteUtilService {
 
   private QuoteRepository quoteRepository;
   private SymbolServiceClient symbolServiceClient;
-  private DateService dateService;
 
-  public QuoteUtilService(QuoteRepository quoteRepository, SymbolServiceClient symbolServiceClient,
-      DateService dateService) {
+  public QuoteUtilService(QuoteRepository quoteRepository,
+      SymbolServiceClient symbolServiceClient) {
     this.quoteRepository = quoteRepository;
     this.symbolServiceClient= symbolServiceClient;
-    this.dateService = dateService;
   }
 
   public List<Quote> findAll() {
@@ -36,12 +33,13 @@ public class QuoteUtilService {
   public AggregateQuote getAggregate(
       String symbol,
       String dateString,
-      TimePeriod timePeriod,
-      String pattern) throws NullPointerException, ParseException {
-
+      TimePeriod timePeriod) throws NullPointerException {
+    if (dateString.split("-").length != 3) {
+      return null;
+    }
     int symbolId = getIdFromSymbolService(symbol);
-    Date fromDate = dateService.parseDate(dateString, pattern);
-    Date toDate = dateService.getNext(timePeriod, fromDate);
+    LocalDate fromDate = LocalDate.parse(dateString);
+    LocalDate toDate = getNext(timePeriod, fromDate);
 
     return quoteRepository.getAggregateData(symbolId, fromDate, toDate);
   }
@@ -50,5 +48,14 @@ public class QuoteUtilService {
     return symbolServiceClient.getSymbolIdByName(symbol);
   }
 
-
+  private LocalDate getNext(TimePeriod timePeriod, LocalDate date) {
+    switch(timePeriod) {
+      case DAY:
+        return date.plusDays(1);
+      case MONTH:
+        return date.plusMonths(1);
+      default:
+        return null;
+    }
+  }
 }

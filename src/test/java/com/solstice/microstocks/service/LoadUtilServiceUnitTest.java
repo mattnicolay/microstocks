@@ -67,15 +67,7 @@ public class LoadUtilServiceUnitTest {
     }
   }
 
-  @Test
-  public void testFindAll() {
-    Quote quote = new Quote(1, 1234.56, 789, new Date());
-    List<Quote> quotes = Arrays.asList(quote, quote, quote);
-    when(quoteRepository.findAll()).thenReturn(quotes);
-    List<Quote> quotesFromService = loadUtilService.findAll();
 
-    assertFalse(quotesFromService.isEmpty());
-  }
 
   @Test
   public void testLoadQuotesJsonFailure() {
@@ -93,11 +85,5 @@ public class LoadUtilServiceUnitTest {
     }
   }
 
-  @Test
-  public void testFindAllEmptyResult() {
-    List<Quote> quotes = loadUtilService.findAll();
-
-    assertTrue(quotes.isEmpty());
-  }
 
 }

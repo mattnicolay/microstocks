@@ -11,6 +11,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.solstice.microstocks.model.AggregateQuote;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,10 +35,9 @@ public class QuoteRepositoryTest {
   private QuoteRepository quoteRepository;
 
   @Test
-  public void testGetAggregateData() throws ParseException {
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    Date fromDate = simpleDateFormat.parse("2018-06-22");
-    Date toDate =simpleDateFormat.parse("2018-06-23");
+  public void testGetAggregateData() {
+    LocalDate fromDate = LocalDate.parse("2018-06-22");
+    LocalDate toDate = LocalDate.parse("2018-06-23");
 
     AggregateQuote expected = new AggregateQuote(
         "GOOG",
@@ -45,7 +45,7 @@ public class QuoteRepositoryTest {
         1111.11,
         6666.66,
         666,
-        fromDate
+        new Date(fromDate.toEpochDay())
     );
 
     AggregateQuote aggregateQuote = quoteRepository.getAggregateData(2, fromDate, toDate);
@@ -57,17 +57,14 @@ public class QuoteRepositoryTest {
     assertThat(aggregateQuote.getMinPrice(), is(equalTo(expected.getMinPrice())));
     assertThat(aggregateQuote.getClosingPrice(), is(equalTo(expected.getClosingPrice())));
     assertThat(aggregateQuote.getTotalVolume(), is(equalTo(expected.getTotalVolume())));
-    //use simpleDateFormat to make sure dates are same format
-    assertThat(simpleDateFormat.format(aggregateQuote.getDate()),
-        is(equalTo(simpleDateFormat.format(expected.getDate()))));
+    assertThat(aggregateQuote.getDate(), is(equalTo(expected.getDate())));
 
   }
 
   @Test
-  public void testGetAggregateDataNoDataFound() throws ParseException {
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    Date fromDate = simpleDateFormat.parse("2018-06-22");
-    Date toDate =simpleDateFormat.parse("2018-06-23");
+  public void testGetAggregateDataNoDataFound() {
+    LocalDate fromDate = LocalDate.parse("2018-06-22");
+    LocalDate toDate = LocalDate.parse("2018-06-23");
 
     AggregateQuote aggregateQuote = quoteRepository.getAggregateData(6, fromDate, toDate);
 

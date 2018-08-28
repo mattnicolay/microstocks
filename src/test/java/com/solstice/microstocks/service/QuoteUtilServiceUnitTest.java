@@ -4,7 +4,9 @@ package com.solstice.microstocks.service;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -12,12 +14,16 @@ import static org.mockito.Mockito.when;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.solstice.microstocks.model.AggregateQuote;
+import com.solstice.microstocks.model.Quote;
 import com.solstice.microstocks.model.TimePeriod;
 import com.solstice.microstocks.repository.QuoteRepository;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,9 +50,6 @@ public class QuoteUtilServiceUnitTest {
   private EurekaClient eurekaClient;
 
   @Mock
-  private DateService dateService;
-
-  @Mock
   private InstanceInfo instanceInfo;
 
   @InjectMocks
@@ -69,12 +72,10 @@ public class QuoteUtilServiceUnitTest {
           new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-06-22 16:30:00"));
 
       when(restTemplate.getForObject(any(String.class), any())).thenReturn(2);
-      when(quoteRepository.getAggregateData(any(Integer.class), any(Date.class), any(Date.class))).thenReturn(expected);
+      when(quoteRepository.getAggregateData(any(Integer.class), any(LocalDate.class), any(LocalDate.class))).thenReturn(expected);
       when(eurekaClient.getNextServerFromEureka(any(String.class), any(Boolean.class))).thenReturn(instanceInfo);
-      when(dateService.parseDate(any(String.class), any(String.class))).thenReturn(new Date());
-      when(dateService.getNext(any(TimePeriod.class), any(Date.class))).thenReturn(new Date());
 
-      AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY, "yyyy-MM-dd");
+      AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY);
 
       assertThat(aggregateQuote.getName(), is(equalTo(expected.getName())));
       assertThat(aggregateQuote.getMaxPrice(), is(equalTo(expected.getMaxPrice())));
@@ -88,10 +89,12 @@ public class QuoteUtilServiceUnitTest {
 
   }
 
+  //add monthly test
+
   @Test
   public void testGetAggregateRestTemplateFailure() {
     try {
-      AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY, "yyyy-MM-dd");
+      AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY);
 
       fail();
     } catch (Exception e) {
@@ -103,14 +106,32 @@ public class QuoteUtilServiceUnitTest {
   public void testGetAggregateNotFoundInRepo() {
     try {
       when(quoteRepository
-          .getAggregateData(any(Integer.class), any(Date.class), any(Date.class)))
+          .getAggregateData(any(Integer.class), any(LocalDate.class), any(LocalDate.class)))
           .thenThrow(new Exception("Not found"));
 
-      AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY, "yyyy-MM-dd");
+      AggregateQuote aggregateQuote = quoteUtilService.getAggregate("GOOG", "2018-06-22", TimePeriod.DAY);
 
       fail();
     } catch (Exception e) {
 
     }
+  }
+
+  @Test
+  public void testFindAll() {
+    Quote quote = new Quote(1, 1234.56, 789, new Date());
+    List<Quote> quotes = Arrays.asList(quote, quote, quote);
+    when(quoteRepository.findAll()).thenReturn(quotes);
+    List<Quote> quotesFromService = quoteUtilService.findAll();
+
+    assertFalse(quotesFromService.isEmpty());
+  }
+
+
+  @Test
+  public void testFindAllEmptyResult() {
+    List<Quote> quotes = quoteUtilService.findAll();
+
+    assertTrue(quotes.isEmpty());
   }
 }

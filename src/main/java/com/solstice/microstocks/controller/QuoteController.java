@@ -4,7 +4,6 @@ import com.solstice.microstocks.model.AggregateQuote;
 import com.solstice.microstocks.model.Quote;
 import com.solstice.microstocks.model.TimePeriod;
 import com.solstice.microstocks.service.QuoteUtilService;
-import java.text.ParseException;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,17 +27,17 @@ public class QuoteController {
   @GetMapping("/daily/{symbol}/{dateString}")
   public AggregateQuote getAggregateDaily(
       @PathVariable String symbol,
-      @PathVariable String dateString) throws Exception {
+      @PathVariable String dateString){
 
-    return quoteUtilService.getAggregate(symbol, dateString, TimePeriod.DAY, "yyyy-MM-dd");
+    return quoteUtilService.getAggregate(symbol, dateString, TimePeriod.DAY);
   }
 
   @GetMapping("/monthly/{symbol}/{dateString}")
   public AggregateQuote getAggregateMonthly(
       @PathVariable String symbol,
-      @PathVariable String dateString) throws Exception {
+      @PathVariable String dateString){
 
-    return quoteUtilService.getAggregate(symbol, dateString, TimePeriod.MONTH, "yyyy-MM");
+    return quoteUtilService.getAggregate(symbol, dateString+"-01", TimePeriod.MONTH);
   }
 
   @GetMapping
