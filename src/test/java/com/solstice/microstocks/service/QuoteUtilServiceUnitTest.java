@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import org.slf4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,12 +27,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 public class QuoteUtilServiceUnitTest {
+
+  private Logger logger = LoggerFactory.getLogger(QuoteUtilServiceUnitTest.class);
 
   @Mock
   private QuoteRepository quoteRepository;
@@ -45,7 +49,7 @@ public class QuoteUtilServiceUnitTest {
   }
 
   @Test
-  public void testGetAggregate() {
+  public void testGetAggregateDaily() {
     try {
       AggregateQuote expected = new AggregateQuote(
           "GOOG",
@@ -64,7 +68,7 @@ public class QuoteUtilServiceUnitTest {
       assertThat(aggregateQuote.getTotalVolume(), is(equalTo(expected.getTotalVolume())));
       assertThat(aggregateQuote.getDate(), is(equalTo(expected.getDate())));
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error("Exception thrown in testGetAggregateDaily method: {}", e.toString());
     }
 
   }
@@ -89,7 +93,7 @@ public class QuoteUtilServiceUnitTest {
       assertThat(aggregateQuote.getTotalVolume(), is(equalTo(expected.getTotalVolume())));
       assertThat(aggregateQuote.getDate(), is(equalTo(expected.getDate())));
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error("Exception thrown in testGetAggregateMonthly method: {}", e.toString());
     }
   }
 

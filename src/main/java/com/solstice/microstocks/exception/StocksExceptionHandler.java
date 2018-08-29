@@ -2,6 +2,8 @@ package com.solstice.microstocks.exception;
 
 import java.io.IOException;
 import java.text.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,26 +15,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice(annotations = RestController.class)
 public class StocksExceptionHandler extends ResponseEntityExceptionHandler {
+
+  private Logger logger = LoggerFactory.getLogger(StocksExceptionHandler.class);
+
   @ExceptionHandler(value = {IOException.class})
   protected ResponseEntity<Object> handleIOException(Exception ex, WebRequest request) {
     String bodyOfResponse = "<h1>ERROR:</h1>\n "
         + "Encountered error with message: \n"
         + ex.getMessage();
-    ex.printStackTrace();
-    return handleExceptionInternal(
-        ex,
-        bodyOfResponse,
-        new HttpHeaders(),
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        request);
-  }
-
-  @ExceptionHandler(value = {ParseException.class})
-  protected ResponseEntity<Object> handleParseException(Exception ex, WebRequest request) {
-    String bodyOfResponse = "<h1>ERROR:</h1>\n "
-        + "<p>Encountered error with message: </p>\n"
-        + ex.getMessage();
-    ex.printStackTrace();
+    logger.error("IOException encountered and handled: {}", ex.toString());
     return handleExceptionInternal(
         ex,
         bodyOfResponse,
@@ -46,7 +37,7 @@ public class StocksExceptionHandler extends ResponseEntityExceptionHandler {
     String bodyOfResponse = "<h1>ERROR:</h1>\n"
         + "<p>Encountered null value.</p>\n"
         + "<p>Make sure the database has been populated.";
-    ex.printStackTrace();
+    logger.error("NullPointerException encountered and handled: {}", ex.toString());
     return handleExceptionInternal(
         ex,
         bodyOfResponse,

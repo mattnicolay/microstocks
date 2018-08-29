@@ -15,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -22,6 +24,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 public class LoadUtilServiceUnitTest {
+
+  private Logger logger = LoggerFactory.getLogger(LoadUtilServiceUnitTest.class);
 
   @Mock
   private QuoteRepository quoteRepository;
@@ -37,7 +41,7 @@ public class LoadUtilServiceUnitTest {
           new URL("https://bootcamp-training-files.cfapps.io/week4/week4_stocks.json"));
       ReflectionTestUtils.setField(loadUtilService, "profile", "local");
     } catch (MalformedURLException e) {
-      e.printStackTrace();
+      logger.error("MalformedURLException thrown in setup method: {}", e.toString());
     }
   }
 
@@ -48,7 +52,7 @@ public class LoadUtilServiceUnitTest {
 
       assertFalse(quotes.isEmpty());
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error("IOException thrown in testLoadQuotes method: {}", e.toString());
     }
   }
 
@@ -60,7 +64,7 @@ public class LoadUtilServiceUnitTest {
 
       assertFalse(quotes.isEmpty());
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error("IOException thrown in testLoadQuotesCloudProfile method: {}", e.toString());
     }
   }
 
@@ -72,10 +76,10 @@ public class LoadUtilServiceUnitTest {
       ReflectionTestUtils.setField(loadUtilService, "datasetUrl",
           new URL("https://bootcamp-training-files.cfapps.io/week4/week4-stocks"));
     } catch (MalformedURLException e) {
-      e.printStackTrace();
+      logger.error("MalformedURLException thrown in testLoadQuotesJsonFailure method: {}", e.toString());
     }
     try {
-      List<Quote> quotes = loadUtilService.loadQuotes();
+      loadUtilService.loadQuotes();
 
       fail();
     } catch (IOException e) {
