@@ -1,15 +1,11 @@
 package com.solstice.microstocks.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.Mockito.when;
 
-import com.solstice.microstocks.model.Quote;
 import com.solstice.microstocks.service.LoadUtilService;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

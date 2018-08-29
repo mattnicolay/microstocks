@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.solstice.microstocks.model.Quote;
 import com.solstice.microstocks.service.QuoteUtilService;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import org.junit.Before;
