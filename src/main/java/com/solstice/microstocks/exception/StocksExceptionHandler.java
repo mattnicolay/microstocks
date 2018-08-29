@@ -2,6 +2,7 @@ package com.solstice.microstocks.exception;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +25,19 @@ public class StocksExceptionHandler extends ResponseEntityExceptionHandler {
         + "Encountered error with message: \n"
         + ex.getMessage();
     logger.error("IOException encountered and handled: {}", ex.toString());
+    return handleExceptionInternal(
+        ex,
+        bodyOfResponse,
+        new HttpHeaders(),
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        request);
+  }
+
+  @ExceptionHandler(value = {DateTimeParseException.class})
+  protected ResponseEntity<Object> handleDateTimeParseException(Exception ex, WebRequest request) {
+    String bodyOfResponse = "<h1>ERROR:</h1>\n "
+        + "Improper date format provided. Expected = yyyy-MM-dd";
+    logger.error("DateTimeParseException encountered and handled: {}", ex.toString());
     return handleExceptionInternal(
         ex,
         bodyOfResponse,

@@ -1,11 +1,13 @@
 package com.solstice.microstocks.service;
 
+import com.solstice.microstocks.exception.ImproperDateFormatException;
 import com.solstice.microstocks.feign.SymbolServiceClient;
 import com.solstice.microstocks.model.AggregateQuote;
 import com.solstice.microstocks.model.Quote;
 import com.solstice.microstocks.model.TimePeriod;
 import com.solstice.microstocks.repository.QuoteRepository;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -33,10 +35,7 @@ public class QuoteUtilService {
   public AggregateQuote getAggregate(
       String symbol,
       String dateString,
-      TimePeriod timePeriod) throws NullPointerException {
-    if (dateString.split("-").length != 3) {
-      return null;
-    }
+      TimePeriod timePeriod) throws NullPointerException, DateTimeParseException {
     int symbolId = getIdFromSymbolService(symbol);
     LocalDate fromDate = LocalDate.parse(dateString);
     LocalDate toDate = getNext(timePeriod, fromDate);
