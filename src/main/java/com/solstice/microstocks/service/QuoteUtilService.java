@@ -1,6 +1,5 @@
 package com.solstice.microstocks.service;
 
-import com.solstice.microstocks.exception.ImproperDateFormatException;
 import com.solstice.microstocks.feign.SymbolServiceClient;
 import com.solstice.microstocks.model.AggregateQuote;
 import com.solstice.microstocks.model.Quote;

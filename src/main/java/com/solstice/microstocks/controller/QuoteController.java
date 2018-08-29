@@ -1,6 +1,5 @@
 package com.solstice.microstocks.controller;
 
-import com.solstice.microstocks.exception.ImproperDateFormatException;
 import com.solstice.microstocks.model.AggregateQuote;
 import com.solstice.microstocks.model.Quote;
 import com.solstice.microstocks.model.TimePeriod;
