@@ -31,16 +31,14 @@ public class LoadUtilService {
     List<Quote> quotes = getStocksFromJson();
 
     if (profile.equals("cloud")) {
-      List<Quote> dbQuotes = quoteRepository.findAll();
+      int dbCount = (int)quoteRepository.count();
       List<Quote> savedQuotes = new ArrayList<>();
 
 
-      for (int i = 0; savedQuotes.size() < 800 && i < quotes.size(); i++) {
+      for (int i = dbCount; savedQuotes.size() < 800 && i < quotes.size(); i++) {
         Quote quote = quotes.get(i);
-        if (!dbQuotes.contains(quote)) {
-          quoteRepository.save(quote);
-          savedQuotes.add(quote);
-        }
+        quoteRepository.save(quote);
+        savedQuotes.add(quote);
       }
 
       return savedQuotes;
