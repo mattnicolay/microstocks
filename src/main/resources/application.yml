@@ -23,7 +23,7 @@ spring:
       true
     hibernate:
       ddl-auto:
-        update
+        create
     properties:
       hibernate:
         dialect:
