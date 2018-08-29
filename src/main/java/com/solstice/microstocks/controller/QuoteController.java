@@ -41,7 +41,7 @@ public class QuoteController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Quote>> getStocks() {
+  public ResponseEntity<List<Quote>> getQuotes() {
     List<Quote> quotes = quoteUtilService.findAll();
     return new ResponseEntity<>(
         quotes,
@@ -50,7 +50,7 @@ public class QuoteController {
   }
 
   @DeleteMapping
-  public ResponseEntity deleteStocks() {
+  public ResponseEntity deleteQuotes() {
     quoteUtilService.deleteAll();
     return new ResponseEntity(new HttpHeaders(), HttpStatus.OK);
   }
