@@ -36,7 +36,7 @@ public class StocksExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(value = {DateTimeParseException.class})
   protected ResponseEntity<Object> handleDateTimeParseException(Exception ex, WebRequest request) {
     String bodyOfResponse = "<h1>ERROR:</h1>\n "
-        + "Improper date format provided. Expected = yyyy-MM-dd";
+        + "Improper date format provided. Expected = yyyy-MM-dd for day or yyyy-MM for month";
     logger.error("DateTimeParseException encountered and handled: {}", ex.toString());
     return handleExceptionInternal(
         ex,
