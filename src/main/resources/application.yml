@@ -28,23 +28,8 @@ spring:
       hibernate:
         dialect:
           org.hibernate.dialect.MySQL5Dialect
-        jdbc:
-          batch_size: 25
   profiles:
     active: local
 
 dataset-url:
   https://bootcamp-training-files.cfapps.io/week4/week4_stocks.json
-
----
-spring:
-  profiles:
-    cloud
-  datasource:
-    url:
-      ${vcap.services.mysql.credentials.jdbcUrl}
-eureka:
-  instance:
-    hostname:
-      ${vcap.application.uris[0]}
-    non-secure-port: 80
