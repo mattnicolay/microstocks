@@ -17,17 +17,21 @@ pipeline {
       }
     }
     stage('Deploy') {
-      def server = Artifactory.server 'artifactory.udemy.123'
-      def uploadSpec = """{
-        "files": [
-          {
-            "pattern": "build/libs/*.jar",
-            "target": "gradle-local/"
-          }
-       ]
-      }"""
-      server.upload(uploadSpec)
-      echo 'Successfully deployed to Artifactory'
+      steps {
+        script {
+          def server = Artifactory.server 'artifactory.udemy.123'
+          def uploadSpec = """{
+            "files": [
+              {
+                "pattern": "build/libs/*.jar",
+                "target": "gradle-local/"
+              }
+           ]
+          }"""
+          server.upload(uploadSpec)
+          echo 'Successfully deployed to Artifactory'
+        }
+      }
     }
   }
 }
