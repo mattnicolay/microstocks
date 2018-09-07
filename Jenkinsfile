@@ -9,11 +9,11 @@ pipeline {
     stage('Test') {
       steps {
         sh './gradlew test --tests com.solstice.microstocks.QuoteServiceApplicationUnitTests'
-        post {
-            always {
-                junit 'target/surefire-reports/*.xml'
-            }
-        }
+      }
+      post {
+          always {
+              junit 'target/surefire-reports/*.xml'
+          }
       }
     }
   }
