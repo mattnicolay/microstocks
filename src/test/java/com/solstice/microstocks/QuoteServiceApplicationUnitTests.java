@@ -12,7 +12,6 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     LoadControllerUnitTest.class,
     QuoteControllerUnitTest.class,
-    QuoteRepositoryTest.class,
     LoadUtilServiceUnitTest.class,
     QuoteUtilServiceUnitTest.class})
 public class QuoteServiceApplicationUnitTests {
